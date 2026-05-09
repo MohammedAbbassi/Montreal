@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu — Restaurant Montréal · Tabarka</title>
+<meta name="description" content="Découvrez la carte complète du Restaurant Montréal à Tabarka — petit déjeuner, cafés, boissons, crêpes, pizzas, plats et desserts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:       #8B1A1A;
+  --red-dark:  #5C0E0E;
+  --red-deep:  #3A0808;
+  --red-light: #B52A2A;
+  --cream:     #F8F2E6;
+  --cream2:    #EDE3CC;
+  --cream3:    #D4C4A0;
+  --gold:      #C9A84C;
+  --gold2:     #A8873C;
+  --charcoal:  #1A1209;
+  --text:      #2C1A0A;
+  --muted:     #8C7355;
+  --white:     #FDFAF4;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--charcoal);
+  color: var(--cream);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: .03;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ——— SCROLL PROGRESS ——— */
+#scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--red-light), var(--gold));
+  z-index: 200;
+  transition: width .1s linear;
+}
+
+/* ——— NAV ——— */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 4rem;
+  background: rgba(26,8,8,.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(139,26,26,.3);
+  transition: padding .3s;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: .04em;
+  text-decoration: none;
+  transition: letter-spacing .3s ease;
+}
+.nav-logo:hover { letter-spacing: .12em; }
+.nav-logo span { color: var(--gold); }
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  color: var(--cream2);
+  text-decoration: none;
+  font-size: .75rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+.nav-back:hover { color: var(--gold); }
+.nav-back svg { transition: transform .2s; }
+.nav-back:hover svg { transform: translateX(-3px); }
+
+/* ——— HERO ——— */
+.menu-hero {
+  min-height: 38vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 8rem 5rem 4rem;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(139,26,26,.3) 0%, transparent 70%),
+    linear-gradient(170deg, var(--red-deep) 0%, #1A0A0A 50%, var(--charcoal) 100%);
+}
+.menu-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(139,26,26,.07) 79px, rgba(139,26,26,.07) 80px),
+    repeating-linear-gradient(90deg, transparent, transparent 119px, rgba(139,26,26,.05) 119px, rgba(139,26,26,.05) 120px);
+  pointer-events: none;
+}
+.menu-hero-content { position: relative; z-index: 2; }
+.menu-hero-tag {
+  font-size: .68rem;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  animation: fadeUp .6s .1s ease both;
+}
+.menu-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 900;
+  line-height: .9;
+  color: var(--cream);
+  animation: fadeUp .7s .25s ease both;
+}
+.menu-hero-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--red-light);
+}
+.menu-hero-sub {
+  margin-top: 1.2rem;
+  font-size: .9rem;
+  color: var(--muted);
+  font-weight: 300;
+  letter-spacing: .06em;
+  animation: fadeUp .7s .4s ease both;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+/* ——— TABS BAR ——— */
+.tabs-bar {
+  position: sticky;
+  top: 68px;
+  z-index: 50;
+  background: rgba(26,8,8,.97);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(139,26,26,.25);
+  padding: 1rem 5rem;
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.tab {
+  padding: .5rem 1.2rem;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(245,237,216,.15);
+  border-radius: 6px;
+  color: var(--cream3);
+  cursor: pointer;
+  transition: all .2s;
+  font-family: 'Jost', sans-serif;
+}
+.tab.active, .tab:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--cream);
+}
+.tab-count {
+  display: inline-block;
+  background: rgba(245,237,216,.1);
+  border-radius: 10px;
+  padding: 0 .4rem;
+  font-size: .6rem;
+  margin-left: .3rem;
+  vertical-align: middle;
+  color: var(--muted);
+}
+.tab.active .tab-count { background: rgba(255,255,255,.15); color: rgba(255,255,255,.7); }
+
+/* ——— MENU BODY ——— */
+.menu-body {
+  padding: 3rem 5rem 7rem;
+}
+
+/* Category heading */
+.cat-heading {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 3rem 0 1.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.cat-heading.visible { opacity: 1; transform: translateY(0); }
+.cat-heading-label {
+  font-size: .65rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.cat-heading-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201,168,76,.3), transparent);
+}
+
+/* ——— MENU GRID ——— */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(139,26,26,.2);
+}
+
+/* ——— MENU CARD ——— */
+.menu-card {
+  background: #130606;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: background .3s, opacity .35s ease, transform .35s ease;
+  cursor: default;
+  transform-style: preserve-3d;
+}
+.menu-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  transform: scaleX(0);
+  transition: transform .4s ease;
+}
+.menu-card:hover { background: #1C0808; }
+.menu-card:hover::before { transform: scaleX(1); }
+.menu-card-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: rgba(139,26,26,.2);
+  line-height: 1;
+  margin-bottom: 1rem;
+  transition: color .3s;
+}
+.menu-card:hover .menu-card-num { color: rgba(139,26,26,.4); }
+.menu-card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--cream);
+  margin-bottom: .5rem;
+  font-weight: 400;
+}
+.menu-card-type {
+  font-size: .65rem;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.menu-card-desc {
+  margin-top: .75rem;
+  font-size: .8rem;
+  color: rgba(212,196,160,.6);
+  font-weight: 300;
+  line-height: 1.6;
+}
+.menu-card-price {
+  position: absolute;
+  top: 2.5rem; right: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  font-style: italic;
+}
+.badge-sig {
+  display: inline-block;
+  font-size: .55rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,.35);
+  border-radius: 4px;
+  padding: .15rem .45rem;
+  margin-left: .5rem;
+  vertical-align: middle;
+}
+
+/* ——— HIDDEN STATE ——— */
+.menu-card.hidden-card,
+.cat-heading.hidden-cat {
+  display: none;
+}
+
+/* ——— FOOTER ——— */
+.menu-footer {
+  text-align: center;
+  padding: 4rem 5rem;
+  border-top: 1px solid rgba(139,26,26,.2);
+}
+.menu-footer-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--cream);
+  margin-bottom: .5rem;
+}
+.menu-footer-sub {
+  font-size: .8rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  letter-spacing: .05em;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--red);
+  color: var(--cream);
+  padding: .9rem 2.2rem;
+  font-size: .8rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--red-light);
+  border-radius: 8px;
+  transition: background .25s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--red-light);
+  transform: translateX(-101%);
+  transition: transform .3s ease;
+}
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+
+/* ——— DECO LEAVES ——— */
+.deco-leaf {
+  position: absolute;
+  pointer-events: none;
+  animation: leafBob 8s ease-in-out infinite;
+  transform: rotate(var(--r, 0deg));
+  user-select: none;
+}
+@keyframes leafBob {
+  0%,100% { transform: rotate(var(--r,0deg)) translateY(0); }
+  50%      { transform: rotate(calc(var(--r,0deg) + var(--drift,5deg))) translateY(var(--bob,-6px)); }
+}
+
+/* ——— RESPONSIVE ——— */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .tabs-bar { padding: .75rem 1.5rem; top: 60px; }
+  .menu-hero { padding: 7rem 1.5rem 3rem; }
+  .menu-body { padding: 2rem 1.5rem 5rem; }
+  .menu-grid { grid-template-columns: 1fr 1fr; }
+  .menu-footer { padding: 3rem 1.5rem; }
+}
+@media (max-width: 600px) {
+  .menu-grid { grid-template-columns: 1fr; }
+  .menu-hero-title { font-size: 2.8rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Montréal<span>.</span></a>
+  <a href="index.html" class="nav-back">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="10 4 6 8 10 12"/>
+    </svg>
+    Retour
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="menu-hero">
+  <span class="deco-leaf" style="font-size:160px;top:-40px;right:5%;opacity:.06;--r:30deg;--drift:-5deg;--bob:-10px;animation-duration:12s;">🍁</span>
+  <span class="deco-leaf" style="font-size:80px;bottom:20px;right:25%;opacity:.08;--r:-20deg;--drift:6deg;--bob:8px;animation-duration:9s;">🍁</span>
+  <div class="menu-hero-content">
+    <div class="menu-hero-tag">Notre Carte · Tabarka · Tunisie</div>
+    <h1 class="menu-hero-title">La <em>Carte</em><br>Complète</h1>
+    <p class="menu-hero-sub">64 articles · DT 3 – 120 · Ouvert 24h/24</p>
+  </div>
+</div>
+
+<!-- STICKY TABS -->
+<div class="tabs-bar" id="tabsBar">
+  <button class="tab active" onclick="filterMenu(this,'tous')">Tous <span class="tab-count">64</span></button>
+  <button class="tab" onclick="filterMenu(this,'petitdej')">Petit Déj. <span class="tab-count">5</span></button>
+  <button class="tab" onclick="filterMenu(this,'cafes')">Cafés & Thés <span class="tab-count">10</span></button>
+  <button class="tab" onclick="filterMenu(this,'boissons')">Boissons <span class="tab-count">13</span></button>
+  <button class="tab" onclick="filterMenu(this,'crepes')">Crêpes <span class="tab-count">8</span></button>
+  <button class="tab" onclick="filterMenu(this,'pizzas')">Pizzas <span class="tab-count">7</span></button>
+  <button class="tab" onclick="filterMenu(this,'plats')">Plats <span class="tab-count">11</span></button>
+  <button class="tab" onclick="filterMenu(this,'desserts')">Desserts <span class="tab-count">10</span></button>
+</div>
+
+<!-- MENU BODY -->
+<div class="menu-body">
+
+  <!-- PETIT DÉJEUNER -->
+  <div class="cat-heading" data-cat="petitdej">
+    <span class="cat-heading-label">🌅 Petit Déjeuner</span>
+    <div class="cat-heading-line"></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">01</div><div class="menu-card-price">12.500 DT</div>
+      <div class="menu-card-name">Classic</div>
+      <div class="menu-card-type">Petit Déjeuner</div>
+      <div class="menu-card-desc">Boisson chaude · jus frais · cake maison · eau 0,5L</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">02</div><div class="menu-card-price">24.000 DT</div>
+      <div class="menu-card-name">Healthy</div>
+      <div class="menu-card-type">Petit Déjeuner</div>
+      <div class="menu-card-desc">Boisson chaude · jus · œuf · yaourt aux granolas · ricotta · fruits de saison</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">03</div><div class="menu-card-price">26.000 DT</div>
+      <div class="menu-card-name">Diamond</div>
+      <div class="menu-card-type">Petit Déjeuner</div>
+      <div class="menu-card-desc">Boisson chaude · jus · cake · beurre · confiture · omelette · fromages & charcuteries</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">04</div><div class="menu-card-price">27.000 DT</div>
+      <div class="menu-card-name">Tunisian</div>
+      <div class="menu-card-type">Petit Déjeuner · Spécialité</div>
+      <div class="menu-card-desc">Ojja aux merguez · salade méchouia · mlawi · bsissa · huile d'olive · dattes</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">05</div><div class="menu-card-price">44.000 DT</div>
+      <div class="menu-card-name">Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Petit Déjeuner · 2 personnes</div>
+      <div class="menu-card-desc">2 boissons · 2 jus · croissants · fondant chocolat · omelette · fromages · Kinder · Spéculoos</div>
+    </div>
+  </div>
+
+  <!-- CAFÉS & THÉS -->
+  <div class="cat-heading" data-cat="cafes">
+    <span class="cat-heading-label">☕ Cafés & Thés</span>
+    <div class="cat-heading-line"></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">06</div><div class="menu-card-price">4.000 DT</div>
+      <div class="menu-card-name">Express</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">07</div><div class="menu-card-price">4.500 DT</div>
+      <div class="menu-card-name">Café Capucin</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">08</div><div class="menu-card-price">4.500 DT</div>
+      <div class="menu-card-name">Café Américain</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">09</div><div class="menu-card-price">5.000 DT</div>
+      <div class="menu-card-name">Café Crème</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">10</div><div class="menu-card-price">6.000 DT</div>
+      <div class="menu-card-name">Cappuccino</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">11</div><div class="menu-card-price">12.500 DT</div>
+      <div class="menu-card-name">Café Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Cafés</div>
+      <div class="menu-card-desc">Café au choix · fondant au chocolat · une boule de glace</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">12</div><div class="menu-card-price">3.000 DT</div>
+      <div class="menu-card-name">Thé à la Menthe</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">13</div><div class="menu-card-price">6.500 DT</div>
+      <div class="menu-card-name">Thé aux Amandes</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">14</div><div class="menu-card-price">10.000 DT</div>
+      <div class="menu-card-name">Thé aux Pignons</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">15</div><div class="menu-card-price">12.500 DT</div>
+      <div class="menu-card-name">Thé Baklawa</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+  </div>
+
+  <!-- BOISSONS -->
+  <div class="cat-heading" data-cat="boissons">
+    <span class="cat-heading-label">🥤 Boissons</span>
+    <div class="cat-heading-line"></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">16</div><div class="menu-card-price">4.500 DT</div>
+      <div class="menu-card-name">Chocolat au Lait</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">17</div><div class="menu-card-price">7.000 DT</div>
+      <div class="menu-card-name">Chocolat Chaud</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">18</div><div class="menu-card-price">8.500 DT</div>
+      <div class="menu-card-name">Chocolat Chaud Chantilly</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">19</div><div class="menu-card-price">11.500 DT</div>
+      <div class="menu-card-name">Chocolat Chaud Spéculoos</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">20</div><div class="menu-card-price">15.000 DT</div>
+      <div class="menu-card-name">Chocolat Chaud Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Boissons Chaudes</div>
+      <div class="menu-card-desc">Chocolat chaud · crème chantilly · biscuit Oreo · fruits secs</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">21</div><div class="menu-card-price">7.000 DT</div>
+      <div class="menu-card-name">Citronnade</div>
+      <div class="menu-card-type">Jus Frais</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">22</div><div class="menu-card-price">8.500 DT</div>
+      <div class="menu-card-name">Citronnade Glacée</div>
+      <div class="menu-card-type">Jus Frais</div>
+      <div class="menu-card-desc">Une boule de glace vanille</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">23</div><div class="menu-card-price">9.000 DT</div>
+      <div class="menu-card-name">Jus Orange / Fraise / Pêche</div>
+      <div class="menu-card-type">Jus Frais</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">24</div><div class="menu-card-price">17.000 DT</div>
+      <div class="menu-card-name">Cocktail Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Cocktails</div>
+      <div class="menu-card-desc">Banane · dattes · fruits secs</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">25</div><div class="menu-card-price">11.000 DT</div>
+      <div class="menu-card-name">Frappuccino Caramel</div>
+      <div class="menu-card-type">Frappuccinos</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">26</div><div class="menu-card-price">11.000 DT</div>
+      <div class="menu-card-name">Milkshake Vanille</div>
+      <div class="menu-card-type">Milkshakes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">27</div><div class="menu-card-price">9.500 DT</div>
+      <div class="menu-card-name">Mojito Virgin</div>
+      <div class="menu-card-type">Mojitos</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">28</div><div class="menu-card-price">18.000 DT</div>
+      <div class="menu-card-name">Mojito Énergétique (Shark)</div>
+      <div class="menu-card-type">Mojitos · Premium</div>
+    </div>
+  </div>
+
+  <!-- CRÊPES -->
+  <div class="cat-heading" data-cat="crepes">
+    <span class="cat-heading-label">🥞 Crêpes</span>
+    <div class="cat-heading-line"></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">29</div><div class="menu-card-price">9.500 DT</div>
+      <div class="menu-card-name">Crêpe Sucre</div>
+      <div class="menu-card-type">Crêpes Sucrées</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">30</div><div class="menu-card-price">14.000 DT</div>
+      <div class="menu-card-name">Crêpe Nutella</div>
+      <div class="menu-card-type">Crêpes Sucrées</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">31</div><div class="menu-card-price">17.500 DT</div>
+      <div class="menu-card-name">Crêpe Pistache</div>
+      <div class="menu-card-type">Crêpes Sucrées</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">32</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Crêpe Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Crêpes Sucrées</div>
+      <div class="menu-card-desc">Nutella · Spéculoos · Oreo · Pistache · boule de glace</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">33</div><div class="menu-card-price">13.500 DT</div>
+      <div class="menu-card-name">Crêpe Regina</div>
+      <div class="menu-card-type">Crêpes Salées</div>
+      <div class="menu-card-desc">Jambon · mozzarella · champignons · harissa</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">34</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Crêpe Thon</div>
+      <div class="menu-card-type">Crêpes Salées</div>
+      <div class="menu-card-desc">Thon · mozzarella · harissa</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">35</div><div class="menu-card-price">18.500 DT</div>
+      <div class="menu-card-name">Crêpe Poulet Pesto</div>
+      <div class="menu-card-type">Crêpes Salées</div>
+      <div class="menu-card-desc">Poulet grillé · mozzarella · sauce pesto</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">36</div><div class="menu-card-price">19.500 DT</div>
+      <div class="menu-card-name">Crêpe Montréal Salée <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Crêpes Salées</div>
+      <div class="menu-card-desc">Saumon · mozzarella · ricotta</div>
+    </div>
+  </div>
+
+  <!-- PIZZAS -->
+  <div class="cat-heading" data-cat="pizzas">
+    <span class="cat-heading-label">🍕 Pizzas</span>
+    <div class="cat-heading-line"></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">37</div><div class="menu-card-price">14.000 DT</div>
+      <div class="menu-card-name">Margherita</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Sauce tomate · mozzarella · basilic frais</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">38</div><div class="menu-card-price">20.000 DT</div>
+      <div class="menu-card-name">Regina</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Sauce tomate · mozzarella · jambon · champignons</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">39</div><div class="menu-card-price">20.000 DT</div>
+      <div class="menu-card-name">Altonno</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Sauce tomate · mozzarella · thon · olives</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">40</div><div class="menu-card-price">24.000 DT</div>
+      <div class="menu-card-name">Quattro Formaggi</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Mozzarella · cheddar · parmesan · gruyère</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">41</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Pizza Pesto</div>
+      <div class="menu-card-type">Pizza Napolitaine · Chef</div>
+      <div class="menu-card-desc">Sauce pesto · burrata · basilic frais</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">42</div><div class="menu-card-price">30.000 DT</div>
+      <div class="menu-card-name">Pizza Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Pizza</div>
+      <div class="menu-card-desc">Sauce tomate ou blanche · mozzarella · saumon · basilic frais</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">43</div><div class="menu-card-price">18.000 DT</div>
+      <div class="menu-card-name">Panuzzo Pollo</div>
+      <div class="menu-card-type">Panuzzo</div>
+      <div class="menu-card-desc">Poulet grillé · gruyère · sauce piquante · frites</div>
+    </div>
+  </div>
+
+  <!-- PLATS -->
+  <div class="cat-heading" data-cat="plats">
+    <span class="cat-heading-label">🍽️ Plats</span>
+    <div class="cat-heading-line"></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">44</div><div class="menu-card-price">19.000 DT</div>
+      <div class="menu-card-name">Pasta Arrabbiata</div>
+      <div class="menu-card-type">Pasta</div>
+      <div class="menu-card-desc">Sauce piquante au thon · olives · câpres</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">45</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Pasta Carbonara</div>
+      <div class="menu-card-type">Pasta</div>
+      <div class="menu-card-desc">Sauce blanche · poulet · jambon · champignons</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">46</div><div class="menu-card-price">32.000 DT</div>
+      <div class="menu-card-name">Salmone Affumicato</div>
+      <div class="menu-card-type">Pasta · Mer</div>
+      <div class="menu-card-desc">Sauce blanche · tagliatelle · saumon</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">47</div><div class="menu-card-price">38.000 DT</div>
+      <div class="menu-card-name">Frutti di Mare</div>
+      <div class="menu-card-type">Pasta · Mer</div>
+      <div class="menu-card-desc">Sauce tomate · spaghetti · fruits de mer</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">48</div><div class="menu-card-price">22.000 DT</div>
+      <div class="menu-card-name">Escalope à la Crème</div>
+      <div class="menu-card-type">Plats · Viande</div>
+      <div class="menu-card-desc">Escalope · sauce aux champignons · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">49</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Daurade Royale</div>
+      <div class="menu-card-type">Plats · Mer</div>
+      <div class="menu-card-desc">Poisson daurade · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">50</div><div class="menu-card-price">54.000 DT</div>
+      <div class="menu-card-name">Crevette Royale</div>
+      <div class="menu-card-type">Plats · Mer · Premium</div>
+      <div class="menu-card-desc">Crevettes royales grillées · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">51</div><div class="menu-card-price">120.000 DT</div>
+      <div class="menu-card-name">Plateau Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Plats · 2 personnes</div>
+      <div class="menu-card-desc">Fruits de mer · daurade · friture de rouget · salade · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">52</div><div class="menu-card-price">18.000 DT</div>
+      <div class="menu-card-name">Salade César</div>
+      <div class="menu-card-type">Entrées</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">53</div><div class="menu-card-price">22.000 DT</div>
+      <div class="menu-card-name">Ojja aux Merguez</div>
+      <div class="menu-card-type">Entrées · Tunisien</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">54</div><div class="menu-card-price">25.000 DT</div>
+      <div class="menu-card-name">Lasagne de Chef</div>
+      <div class="menu-card-type">Pasta · Chef</div>
+    </div>
+  </div>
+
+  <!-- DESSERTS -->
+  <div class="cat-heading" data-cat="desserts">
+    <span class="cat-heading-label">🍮 Desserts & Smoothies</span>
+    <div class="cat-heading-line"></div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">55</div><div class="menu-card-price">8.000 DT</div>
+      <div class="menu-card-name">Tarte au Citron</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">56</div><div class="menu-card-price">13.500 DT</div>
+      <div class="menu-card-name">Cheesecake</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">57</div><div class="menu-card-price">13.500 DT</div>
+      <div class="menu-card-name">Tiramisu</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">58</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Fondant au Chocolat</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">59</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Brownie</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">60</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Banana Split</div>
+      <div class="menu-card-type">Glaces</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">61</div><div class="menu-card-price">13.000 DT</div>
+      <div class="menu-card-name">Smoothie Pina Colada</div>
+      <div class="menu-card-type">Smoothies</div>
+      <div class="menu-card-desc">Ananas · noix de coco · yaourt · mascarpone</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">62</div><div class="menu-card-price">17.000 DT</div>
+      <div class="menu-card-name">Smoothie Jwajem</div>
+      <div class="menu-card-type">Smoothies · Premium</div>
+      <div class="menu-card-desc">Fruits · fruits secs · yaourt · crème chantilly</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">63</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Smoothie Bowl Montréal <span class="badge-sig">Signature</span></div>
+      <div class="menu-card-type">Smoothies Bowl</div>
+      <div class="menu-card-desc">Banane · fraise · dattes · granola</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">64</div><div class="menu-card-price">12.000 DT</div>
+      <div class="menu-card-name">Menu Enfant Kidream</div>
+      <div class="menu-card-type">Menu Enfant</div>
+      <div class="menu-card-desc">Nuggets · frites · pâte ou riz</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="menu-footer">
+  <div class="menu-footer-title">Réservez votre table</div>
+  <div class="menu-footer-sub">Vue sur mer · Ouvert 24h/24 · Tabarka, Tunisie</div>
+  <a href="index.html#contact" class="btn-primary"><span>Réserver une table</span></a>
+</div>
+
+<script>
+// ——— SCROLL PROGRESS ———
+window.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  document.getElementById('scroll-progress').style.width = (p * 100) + '%';
+}, { passive: true });
+
+// ——— FILTER ———
+function filterMenu(btn, cat) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.menu-card');
+  const headings = document.querySelectorAll('.cat-heading');
+  const grids = document.querySelectorAll('.menu-grid');
+
+  if (cat === 'tous') {
+    headings.forEach(h => { h.classList.remove('hidden-cat'); h.classList.add('visible'); });
+    grids.forEach(g => g.style.display = 'grid');
+    cards.forEach((card, i) => {
+      card.classList.remove('hidden-card');
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(14px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity .3s ease, transform .3s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, i * 25);
+    });
+  } else {
+    // Show only matching heading & hide others
+    headings.forEach(h => {
+      if (h.dataset.cat === cat) { h.classList.remove('hidden-cat'); setTimeout(() => h.classList.add('visible'), 50); }
+      else { h.classList.add('hidden-cat'); h.classList.remove('visible'); }
+    });
+
+    // Hide all grids, then show only matching cards in a flat grid
+    grids.forEach(g => g.style.display = 'none');
+
+    // Gather matching cards and show them in the first grid of that category
+    let visibleIdx = 0;
+    cards.forEach(card => {
+      if (card.dataset.cat === cat) {
+        card.classList.remove('hidden-card');
+        card.closest('.menu-grid').style.display = 'grid';
+        const delay = visibleIdx * 40;
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(14px)';
+        setTimeout(() => {
+          card.style.transition = 'opacity .3s ease, transform .3s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, delay);
+        visibleIdx++;
+      } else {
+        card.classList.add('hidden-card');
+      }
+    });
+  }
+
+  // Scroll to just below the sticky tabs
+  const tabsBottom = document.getElementById('tabsBar').getBoundingClientRect().bottom + window.scrollY;
+  window.scrollTo({ top: tabsBottom - 80, behavior: 'smooth' });
+}
+
+// ——— CARD TILT ———
+document.querySelectorAll('.menu-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    card.style.transform = `perspective(600px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) translateZ(6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(600px) rotateY(0) rotateX(0) translateZ(0)';
+    card.style.transition = 'transform .5s ease, opacity .3s ease, background .3s';
+  });
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'transform .1s ease, opacity .3s ease, background .3s';
+  });
+});
+
+// ——— CATEGORY HEADING REVEAL ———
+const catObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); catObs.unobserve(e.target); }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.cat-heading').forEach(h => catObs.observe(h));
+</script>
+</body>
+</html>
