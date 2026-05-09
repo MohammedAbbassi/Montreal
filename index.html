@@ -1732,7 +1732,13 @@ section { position: relative; overflow: hidden; }
   <div class="footer-copy">© 2025 Restaurant Montréal · Tabarka</div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ——— SUPABASE CONFIG ———
+const SUPABASE_URL = 'https://vxbxrkoeioakqrxvbnym.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_lh6JBbtLtg9L5OV6Rh7SMA_W0hjU8zd';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // ——— PAGE LOAD CURTAIN ———
 function dismissCurtain() {
   document.getElementById('curtain').classList.add('gone');
@@ -1933,42 +1939,90 @@ if (dateInput) {
   dateInput.addEventListener('change', renderTimeSlots);
 }
 
-// Time slots — simulates some booked slots
-const ALL_SLOTS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
+// Time slots — generated every 30 mins
+const OPEN_TIME = "12:00";
+const CLOSE_TIME = "23:00";
+const SLOT_DURATION = 30; // minutes
+const MAX_GUESTS_PER_SLOT = 20;
 
-function getBookedSlots(dateStr) {
-  const saved = JSON.parse(localStorage.getItem('reservations') || '[]');
-  return saved.filter(r => r.date === dateStr).map(r => r.time);
+function generateSlots() {
+  const slots = [];
+  let current = new Date(`2026-01-01T${OPEN_TIME}:00`);
+  const end = new Date(`2026-01-01T${CLOSE_TIME}:00`);
+  while (current <= end) {
+    slots.push(current.toTimeString().slice(0, 5));
+    current.setMinutes(current.getMinutes() + SLOT_DURATION);
+  }
+  return slots;
+}
+const ALL_SLOTS = generateSlots();
+
+async function getBookedSlots(dateStr) {
+  try {
+    const { data, error } = await supabaseClient
+      .from('reservations')
+      .select('time, guests')
+      .eq('date', dateStr)
+      .neq('status', 'cancelled');
+    
+    if (error) throw error;
+    
+    // Aggregate guests per slot
+    const slotUsage = {};
+    data.forEach(r => {
+      slotUsage[r.time] = (slotUsage[r.time] || 0) + r.guests;
+    });
+    
+    return slotUsage;
+  } catch (err) {
+    console.error('Error fetching availability:', err);
+    return {};
+  }
 }
 
-function renderTimeSlots() {
+async function renderTimeSlots() {
   const container = document.getElementById('timeSlots');
   if (!container) return;
   const dateStr = document.getElementById('f-date').value;
-  const booked = getBookedSlots(dateStr);
+  if (!dateStr) return;
+  
+  container.innerHTML = '<div style="color:var(--gold);font-size:.8rem;padding:1rem;">Chargement des disponibilités...</div>';
+  
+  const slotUsage = await getBookedSlots(dateStr);
   container.innerHTML = '';
   selectedTime = '';
+  
   ALL_SLOTS.forEach(t => {
+    const currentGuests = slotUsage[t] || 0;
+    const isFull = (currentGuests + guestCount) > MAX_GUESTS_PER_SLOT;
+    
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'time-slot' + (booked.includes(t) ? ' booked' : '');
+    btn.className = 'time-slot' + (isFull ? ' booked' : '');
     btn.textContent = t;
-    if (!booked.includes(t)) {
+    
+    if (!isFull) {
       btn.onclick = () => {
         document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
         btn.classList.add('selected');
         selectedTime = t;
         document.getElementById('err-time').textContent = '';
       };
+    } else {
+      btn.title = "Complet";
     }
     container.appendChild(btn);
   });
 }
+
+// Initial render
+document.getElementById('f-date').addEventListener('change', renderTimeSlots);
 renderTimeSlots();
 
 function changeGuests(delta) {
   guestCount = Math.max(1, Math.min(20, guestCount + delta));
   document.getElementById('guest-display').textContent = guestCount;
+  renderTimeSlots(); // Re-render to check capacity for new guest count
 }
 
 function togglePill(el) {
@@ -2050,7 +2104,7 @@ function buildSummary() {
     </div>`).join('');
 }
 
-function submitReservation() {
+async function submitReservation() {
   if (!document.getElementById('f-terms').checked) {
     showError('err-terms', 'Veuillez accepter pour continuer');
     return;
@@ -2058,23 +2112,41 @@ function submitReservation() {
   clearError('err-terms');
 
   const btn = document.getElementById('finalBtn');
+  const originalText = btn.textContent;
   btn.textContent = '⏳ Envoi en cours…';
   btn.disabled = true;
 
-  // Simulate network delay then save
-  setTimeout(() => {
-    const ref = 'MNT-' + Date.now().toString(36).toUpperCase().slice(-6);
-    const reservation = {
-      ref, date: val('f-date'), time: selectedTime,
-      guests: guestCount, occasion: selectedOccasion,
-      name: val('f-prenom') + ' ' + val('f-nom'),
-      tel: val('f-tel'), email: val('f-email'),
-      message: val('f-message'),
-      createdAt: new Date().toISOString()
-    };
-    const saved = JSON.parse(localStorage.getItem('reservations') || '[]');
-    saved.push(reservation);
-    localStorage.setItem('reservations', JSON.stringify(saved));
+  try {
+    // 1. Final availability check (atomic-ish via double check)
+    const slotUsage = await getBookedSlots(val('f-date'));
+    const currentGuests = slotUsage[selectedTime] || 0;
+    if (currentGuests + guestCount > MAX_GUESTS_PER_SLOT) {
+      alert("Désolé, ce créneau vient d'être réservé par un autre client. Veuillez choisir une autre heure.");
+      renderTimeSlots();
+      goStep(2);
+      return;
+    }
+
+    // 2. Insert into Supabase
+    const { data, error } = await supabaseClient
+      .from('reservations')
+      .insert([{
+        first_name: val('f-prenom'),
+        last_name: val('f-nom'),
+        phone: val('f-tel'),
+        email: val('f-email') || null,
+        guests: guestCount,
+        date: val('f-date'),
+        time: selectedTime,
+        occasion: selectedOccasion || null,
+        special_requests: val('f-message') || null,
+        status: 'pending'
+      }])
+      .select();
+
+    if (error) throw error;
+
+    const ref = 'MNT-' + data[0].id.slice(0, 8).toUpperCase();
 
     // Show modal
     document.getElementById('modal-ref').textContent = 'Référence · ' + ref;
@@ -2082,9 +2154,14 @@ function submitReservation() {
       `Votre table pour <strong>${guestCount} personne${guestCount>1?'s':''}</strong> le <strong>${new Date(val('f-date')+'T12:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}</strong> à <strong>${selectedTime}</strong> est bien enregistrée.<br><br>Le restaurant vous contactera au <strong>${val('f-tel')}</strong> pour confirmer.`;
 
     document.getElementById('confirm-modal').classList.add('show');
-    btn.textContent = '✓ Confirmer la réservation';
+    
+  } catch (err) {
+    console.error('Submission error:', err);
+    alert("Une erreur est survenue lors de la réservation. Veuillez réessayer ou nous contacter par téléphone.");
+  } finally {
+    btn.textContent = originalText;
     btn.disabled = false;
-  }, 1200);
+  }
 }
 
 function closeModal() {

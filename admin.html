@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Restaurant Montréal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --red:       #8B1A1A;
+  --red-dark:  #5C0E0E;
+  --red-deep:  #3A0808;
+  --cream:     #F8F2E6;
+  --gold:      #C9A84C;
+  --charcoal:  #1A1209;
+  --text:      #2C1A0A;
+  --white:     #FDFAF4;
+}
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--charcoal);
+  color: var(--cream);
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* ——— LOGIN ——— */
+#login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+.login-card {
+  background: var(--red-dark);
+  padding: 3rem;
+  border-radius: 12px;
+  border: 1px solid rgba(201,168,76,.3);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+.login-card h1 {
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 2rem;
+  color: var(--gold);
+}
+.form-group { text-align: left; margin-bottom: 1.5rem; }
+.form-group label { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; color: rgba(245,237,216,.6); }
+.form-group input {
+  width: 100%;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(245,237,216,.1);
+  padding: .8rem;
+  color: var(--cream);
+  border-radius: 6px;
+  outline: none;
+}
+.form-group input:focus { border-color: var(--gold); }
+.login-btn {
+  width: 100%;
+  background: var(--gold);
+  color: var(--red-dark);
+  border: none;
+  padding: 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  cursor: pointer;
+}
+
+/* ——— DASHBOARD ——— */
+#admin-dashboard { display: none; padding: 2rem 4rem; }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(201,168,76,.2);
+  padding-bottom: 1.5rem;
+}
+header h1 { font-family: 'Playfair Display', serif; font-size: 2rem; }
+.logout-btn {
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(245,237,216,.2);
+  padding: .5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: .8rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  background: rgba(255,255,255,.05);
+  padding: 1.5rem;
+  border-radius: 8px;
+  align-items: flex-end;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: rgba(139,26,26,.2);
+  border: 1px solid rgba(139,26,26,.4);
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+.stat-card .val { font-size: 2rem; font-family: 'Playfair Display', serif; color: var(--gold); }
+.stat-card .lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: rgba(245,237,216,.5); }
+
+/* Table */
+.table-container {
+  background: rgba(0,0,0,.2);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(245,237,216,.1);
+}
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th {
+  text-align: left;
+  background: rgba(139,26,26,.3);
+  padding: 1rem;
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--gold);
+}
+td { padding: 1rem; border-bottom: 1px solid rgba(245,237,216,.05); vertical-align: middle; }
+tr:hover { background: rgba(255,255,255,.02); }
+
+.status-badge {
+  padding: .3rem .7rem;
+  border-radius: 20px;
+  font-size: .7rem;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.status-pending   { background: #F39C12; color: #fff; }
+.status-confirmed { background: #27AE60; color: #fff; }
+.status-cancelled { background: #E74C3C; color: #fff; }
+.status-completed { background: #3498DB; color: #fff; }
+
+.actions { display: flex; gap: .5rem; }
+.btn-icon {
+  width: 32px; height: 32px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: transparent;
+  color: var(--cream);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.btn-icon:hover { border-color: var(--gold); color: var(--gold); }
+.btn-icon.delete:hover { border-color: #E74C3C; color: #E74C3C; }
+
+select.status-select {
+  background: var(--charcoal);
+  color: var(--cream);
+  border: 1px solid rgba(245,237,216,.2);
+  padding: .3rem;
+  border-radius: 4px;
+  font-size: .8rem;
+}
+
+@media (max-width: 900px) {
+  #admin-dashboard { padding: 1rem; }
+  .filters { flex-direction: column; align-items: stretch; }
+  table { display: block; overflow-x: auto; }
+}
+</style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="login-container">
+    <div class="login-card">
+      <h1>Admin Montréal</h1>
+      <form id="login-form">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" required placeholder="admin@restaurant.com">
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="login-btn">Connexion</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="admin-dashboard">
+    <header>
+      <h1>Tableau de Bord</h1>
+      <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </header>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="val" id="stat-total">0</div>
+        <div class="lbl">Total Réservations</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="stat-pending">0</div>
+        <div class="lbl">En Attente</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="stat-today">0</div>
+        <div class="lbl">Pour Aujourd'hui</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="form-group" style="margin:0; flex:1;">
+        <label>Filtrer par date</label>
+        <input type="date" id="filter-date">
+      </div>
+      <button class="login-btn" style="width:auto; padding:.8rem 2rem;" onclick="loadReservations()">Actualiser</button>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date / Heure</th>
+            <th>Client</th>
+            <th>Couverts</th>
+            <th>Contact</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reservation-table">
+          <!-- Rows via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+const SUPABASE_URL = 'https://vxbxrkoeioakqrxvbnym.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_lh6JBbtLtg9L5OV6Rh7SMA_W0hjU8zd';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const loginForm = document.getElementById('login-form');
+const loginContainer = document.getElementById('login-container');
+const dashboard = document.getElementById('admin-dashboard');
+
+// Check auth state
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    loginContainer.style.display = 'none';
+    dashboard.style.display = 'block';
+    loadReservations();
+  } else {
+    loginContainer.style.display = 'flex';
+    dashboard.style.display = 'none';
+  }
+});
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (error) alert('Erreur: ' + error.message);
+});
+
+async function logout() {
+  await supabaseClient.auth.signOut();
+}
+
+async function loadReservations() {
+  const dateFilter = document.getElementById('filter-date').value;
+  let query = supabaseClient
+    .from('reservations')
+    .select('*')
+    .order('date', { ascending: true })
+    .order('time', { ascending: true });
+
+  if (dateFilter) {
+    query = query.eq('date', dateFilter);
+  }
+
+  const { data, error } = await query;
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  renderTable(data);
+  updateStats(data);
+}
+
+function updateStats(data) {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('stat-total').textContent = data.length;
+  document.getElementById('stat-pending').textContent = data.filter(r => r.status === 'pending').length;
+  document.getElementById('stat-today').textContent = data.filter(r => r.date === today).length;
+}
+
+function renderTable(reservations) {
+  const tbody = document.getElementById('reservation-table');
+  tbody.innerHTML = '';
+
+  reservations.forEach(res => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div style="font-weight:600; color:var(--gold)">${res.time}</div>
+        <div style="font-size:.75rem; color:rgba(245,237,216,.5)">${new Date(res.date).toLocaleDateString('fr-FR')}</div>
+      </td>
+      <td>
+        <div style="font-weight:500">${res.first_name} ${res.last_name}</div>
+        ${res.occasion ? `<div style="font-size:.7rem; color:var(--gold)">${res.occasion}</div>` : ''}
+        ${res.special_requests ? `<div style="font-size:.7rem; color:rgba(245,237,216,.4); font-style:italic; max-width:200px;">"${res.special_requests}"</div>` : ''}
+      </td>
+      <td><span style="background:rgba(255,255,255,.1); padding:.2rem .5rem; border-radius:4px;">${res.guests}</span></td>
+      <td>
+        <div style="font-size:.85rem">${res.phone}</div>
+        <div style="font-size:.75rem; color:rgba(245,237,216,.4)">${res.email || '-'}</div>
+      </td>
+      <td>
+        <select class="status-select" onchange="updateStatus('${res.id}', this.value)">
+          <option value="pending" ${res.status === 'pending' ? 'selected' : ''}>En attente</option>
+          <option value="confirmed" ${res.status === 'confirmed' ? 'selected' : ''}>Confirmé</option>
+          <option value="cancelled" ${res.status === 'cancelled' ? 'selected' : ''}>Annulé</option>
+          <option value="completed" ${res.status === 'completed' ? 'selected' : ''}>Terminé</option>
+        </select>
+      </td>
+      <td>
+        <div class="actions">
+          <button class="btn-icon delete" onclick="deleteReservation('${res.id}')" title="Supprimer">🗑️</button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function updateStatus(id, newStatus) {
+  const { error } = await supabaseClient
+    .from('reservations')
+    .update({ status: newStatus })
+    .eq('id', id);
+  
+  if (error) alert('Erreur lors de la mise à jour: ' + error.message);
+  else loadReservations();
+}
+
+async function deleteReservation(id) {
+  if (!confirm('Voulez-vous vraiment supprimer cette réservation ?')) return;
+  const { error } = await supabaseClient
+    .from('reservations')
+    .delete()
+    .eq('id', id);
+  
+  if (error) alert('Erreur lors de la suppression: ' + error.message);
+  else loadReservations();
+}
+
+// Default filter to today (optional)
+// document.getElementById('filter-date').value = new Date().toISOString().split('T')[0];
+
+</script>
+</body>
+</html>
