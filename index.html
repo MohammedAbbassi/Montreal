@@ -1216,55 +1216,393 @@ section { position: relative; overflow: hidden; }
 <section class="menu-section" id="menu">
   <span class="deco-leaf" style="font-size:140px;top:40px;right:-35px;opacity:.07;--r:40deg;--drift:-7deg;--bob:-10px;animation-duration:11s;">🍁</span>
   <span class="deco-leaf" style="font-size:90px;bottom:-10px;left:-15px;opacity:.08;--r:-55deg;--drift:8deg;--bob:8px;animation-duration:8s;">🍁</span>
+
   <div class="menu-header reveal">
     <div>
       <div class="section-tag">Notre Carte</div>
       <h2 class="section-title">Le <em>Menu</em></h2>
     </div>
-    <div class="menu-tabs">
+    <div class="menu-tabs" id="menuTabs">
       <button class="tab active" onclick="filterMenu(this,'tous')">Tous</button>
+      <button class="tab" onclick="filterMenu(this,'petitdej')">Petit Déj.</button>
+      <button class="tab" onclick="filterMenu(this,'cafes')">Cafés & Thés</button>
       <button class="tab" onclick="filterMenu(this,'boissons')">Boissons</button>
-      <button class="tab" onclick="filterMenu(this,'plats')">Plats</button>
+      <button class="tab" onclick="filterMenu(this,'crepes')">Crêpes</button>
       <button class="tab" onclick="filterMenu(this,'pizzas')">Pizzas</button>
+      <button class="tab" onclick="filterMenu(this,'plats')">Plats</button>
+      <button class="tab" onclick="filterMenu(this,'desserts')">Desserts</button>
     </div>
   </div>
+
   <div class="menu-grid reveal" id="menuGrid">
-    <div class="menu-card" data-cat="boissons">
-      <div class="menu-card-num">01</div>
-      <div class="menu-card-price">4 DT</div>
+
+    <!-- PETIT DÉJEUNER -->
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">01</div><div class="menu-card-price">12.500 DT</div>
+      <div class="menu-card-name">Classic</div>
+      <div class="menu-card-type">Petit Déjeuner</div>
+      <div class="menu-card-desc">Boisson chaude · jus frais · cake maison · eau 0,5L</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">02</div><div class="menu-card-price">24.000 DT</div>
+      <div class="menu-card-name">Healthy</div>
+      <div class="menu-card-type">Petit Déjeuner</div>
+      <div class="menu-card-desc">Boisson chaude · jus · œuf · yaourt aux granolas · ricotta · fruits de saison</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">03</div><div class="menu-card-price">26.000 DT</div>
+      <div class="menu-card-name">Diamond</div>
+      <div class="menu-card-type">Petit Déjeuner</div>
+      <div class="menu-card-desc">Boisson chaude · jus · cake · beurre · confiture · omelette · fromages & charcuteries</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">04</div><div class="menu-card-price">27.000 DT</div>
+      <div class="menu-card-name">Tunisian</div>
+      <div class="menu-card-type">Petit Déjeuner · Spécialité</div>
+      <div class="menu-card-desc">Ojja aux merguez · salade méchouia · mlawi · bsissa · huile d'olive · dattes</div>
+    </div>
+    <div class="menu-card" data-cat="petitdej">
+      <div class="menu-card-num">05</div><div class="menu-card-price">44.000 DT</div>
+      <div class="menu-card-name">Montréal</div>
+      <div class="menu-card-type">Petit Déjeuner · 2 personnes</div>
+      <div class="menu-card-desc">2 boissons · 2 jus · croissants · fondant chocolat · omelette · fromages · Kinder · Spéculoos</div>
+    </div>
+
+    <!-- CAFÉS -->
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">06</div><div class="menu-card-price">4.000 DT</div>
+      <div class="menu-card-name">Express</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">07</div><div class="menu-card-price">4.500 DT</div>
+      <div class="menu-card-name">Café Capucin</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">08</div><div class="menu-card-price">4.500 DT</div>
+      <div class="menu-card-name">Café Américain</div>
+      <div class="menu-card-type">Cafés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">09</div><div class="menu-card-price">5.000 DT</div>
       <div class="menu-card-name">Café Crème</div>
-      <div class="menu-card-type">Boissons · Chaudes</div>
+      <div class="menu-card-type">Cafés</div>
     </div>
-    <div class="menu-card" data-cat="plats">
-      <div class="menu-card-num">02</div>
-      <div class="menu-card-price">12 DT</div>
-      <div class="menu-card-name">Crêpe au Thon et Fromage</div>
-      <div class="menu-card-type">Plats chauds · Spécialité</div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">10</div><div class="menu-card-price">6.000 DT</div>
+      <div class="menu-card-name">Cappuccino</div>
+      <div class="menu-card-type">Cafés</div>
     </div>
-    <div class="menu-card" data-cat="pizzas">
-      <div class="menu-card-num">03</div>
-      <div class="menu-card-price">18 DT</div>
-      <div class="menu-card-name">Pizza Reine</div>
-      <div class="menu-card-type">Pizzas · Classiques</div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">11</div><div class="menu-card-price">12.500 DT</div>
+      <div class="menu-card-name">Café Montréal</div>
+      <div class="menu-card-type">Cafés · Signature</div>
+      <div class="menu-card-desc">Café au choix · fondant au chocolat · une boule de glace</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">12</div><div class="menu-card-price">3.000 DT</div>
+      <div class="menu-card-name">Thé à la Menthe</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">13</div><div class="menu-card-price">6.500 DT</div>
+      <div class="menu-card-name">Thé aux Amandes</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">14</div><div class="menu-card-price">10.000 DT</div>
+      <div class="menu-card-name">Thé aux Pignons</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+    <div class="menu-card" data-cat="cafes">
+      <div class="menu-card-num">15</div><div class="menu-card-price">12.500 DT</div>
+      <div class="menu-card-name">Thé Baklawa</div>
+      <div class="menu-card-type">Thés</div>
+    </div>
+
+    <!-- BOISSONS CHAUDES & FRAICHES -->
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">16</div><div class="menu-card-price">4.500 DT</div>
+      <div class="menu-card-name">Chocolat au Lait</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
     </div>
     <div class="menu-card" data-cat="boissons">
-      <div class="menu-card-num">04</div>
-      <div class="menu-card-price">5 DT</div>
-      <div class="menu-card-name">Cortado</div>
-      <div class="menu-card-type">Boissons · Café</div>
+      <div class="menu-card-num">17</div><div class="menu-card-price">7.000 DT</div>
+      <div class="menu-card-name">Chocolat Chaud</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
     </div>
-    <div class="menu-card" data-cat="plats">
-      <div class="menu-card-num">05</div>
-      <div class="menu-card-price">22 DT</div>
-      <div class="menu-card-name">Poisson Grillé du Jour</div>
-      <div class="menu-card-type">Plats · Mer</div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">18</div><div class="menu-card-price">8.500 DT</div>
+      <div class="menu-card-name">Chocolat Chaud Chantilly</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">19</div><div class="menu-card-price">11.500 DT</div>
+      <div class="menu-card-name">Chocolat Chaud Spéculoos</div>
+      <div class="menu-card-type">Boissons Chaudes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">20</div><div class="menu-card-price">15.000 DT</div>
+      <div class="menu-card-name">Chocolat Chaud Montréal</div>
+      <div class="menu-card-type">Boissons Chaudes · Signature</div>
+      <div class="menu-card-desc">Chocolat chaud · crème chantilly · biscuit Oreo · fruits secs</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">21</div><div class="menu-card-price">7.000 DT</div>
+      <div class="menu-card-name">Citronnade</div>
+      <div class="menu-card-type">Jus Frais</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">22</div><div class="menu-card-price">8.500 DT</div>
+      <div class="menu-card-name">Citronnade Glacée</div>
+      <div class="menu-card-type">Jus Frais</div>
+      <div class="menu-card-desc">Une boule de glace vanille</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">23</div><div class="menu-card-price">9.000 DT</div>
+      <div class="menu-card-name">Jus Orange / Fraise / Pêche</div>
+      <div class="menu-card-type">Jus Frais</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">24</div><div class="menu-card-price">17.000 DT</div>
+      <div class="menu-card-name">Cocktail Montréal</div>
+      <div class="menu-card-type">Cocktails · Signature</div>
+      <div class="menu-card-desc">Banane · dattes · fruits secs</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">25</div><div class="menu-card-price">11.000 DT</div>
+      <div class="menu-card-name">Frappuccino Caramel</div>
+      <div class="menu-card-type">Frappuccinos</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">26</div><div class="menu-card-price">11.000 DT</div>
+      <div class="menu-card-name">Milkshake Vanille</div>
+      <div class="menu-card-type">Milkshakes</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">27</div><div class="menu-card-price">9.500 DT</div>
+      <div class="menu-card-name">Mojito Virgin</div>
+      <div class="menu-card-type">Mojitos</div>
+    </div>
+    <div class="menu-card" data-cat="boissons">
+      <div class="menu-card-num">28</div><div class="menu-card-price">18.000 DT</div>
+      <div class="menu-card-name">Mojito Énergétique (Shark)</div>
+      <div class="menu-card-type">Mojitos · Premium</div>
+    </div>
+
+    <!-- CRÊPES -->
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">29</div><div class="menu-card-price">9.500 DT</div>
+      <div class="menu-card-name">Crêpe Sucre</div>
+      <div class="menu-card-type">Crêpes Sucrées</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">30</div><div class="menu-card-price">14.000 DT</div>
+      <div class="menu-card-name">Crêpe Nutella</div>
+      <div class="menu-card-type">Crêpes Sucrées</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">31</div><div class="menu-card-price">17.500 DT</div>
+      <div class="menu-card-name">Crêpe Pistache</div>
+      <div class="menu-card-type">Crêpes Sucrées</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">32</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Crêpe Montréal</div>
+      <div class="menu-card-type">Crêpes Sucrées · Signature</div>
+      <div class="menu-card-desc">Nutella · Spéculoos · Oreo · Pistache · boule de glace</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">33</div><div class="menu-card-price">13.500 DT</div>
+      <div class="menu-card-name">Crêpe Regina</div>
+      <div class="menu-card-type">Crêpes Salées</div>
+      <div class="menu-card-desc">Jambon · mozzarella · champignons · harissa</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">34</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Crêpe Thon</div>
+      <div class="menu-card-type">Crêpes Salées</div>
+      <div class="menu-card-desc">Thon · mozzarella · harissa</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">35</div><div class="menu-card-price">18.500 DT</div>
+      <div class="menu-card-name">Crêpe Poulet Pesto</div>
+      <div class="menu-card-type">Crêpes Salées</div>
+      <div class="menu-card-desc">Poulet grillé · mozzarella · sauce pesto</div>
+    </div>
+    <div class="menu-card" data-cat="crepes">
+      <div class="menu-card-num">36</div><div class="menu-card-price">19.500 DT</div>
+      <div class="menu-card-name">Crêpe Montréal Salée</div>
+      <div class="menu-card-type">Crêpes Salées · Signature</div>
+      <div class="menu-card-desc">Saumon · mozzarella · ricotta</div>
+    </div>
+
+    <!-- PIZZAS -->
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">37</div><div class="menu-card-price">14.000 DT</div>
+      <div class="menu-card-name">Margherita</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Sauce tomate · mozzarella · basilic frais</div>
     </div>
     <div class="menu-card" data-cat="pizzas">
-      <div class="menu-card-num">06</div>
-      <div class="menu-card-price">20 DT</div>
-      <div class="menu-card-name">Pizza 4 Fromages</div>
-      <div class="menu-card-type">Pizzas · Signature</div>
+      <div class="menu-card-num">38</div><div class="menu-card-price">20.000 DT</div>
+      <div class="menu-card-name">Regina</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Sauce tomate · mozzarella · jambon · champignons</div>
     </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">39</div><div class="menu-card-price">20.000 DT</div>
+      <div class="menu-card-name">Altonno</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Sauce tomate · mozzarella · thon · olives</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">40</div><div class="menu-card-price">24.000 DT</div>
+      <div class="menu-card-name">Quattro Formaggi</div>
+      <div class="menu-card-type">Pizza Napolitaine</div>
+      <div class="menu-card-desc">Mozzarella · cheddar · parmesan · gruyère</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">41</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Pizza Pesto</div>
+      <div class="menu-card-type">Pizza Napolitaine · Chef</div>
+      <div class="menu-card-desc">Sauce pesto · burrata · basilic frais</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">42</div><div class="menu-card-price">30.000 DT</div>
+      <div class="menu-card-name">Pizza Montréal</div>
+      <div class="menu-card-type">Pizza · Signature</div>
+      <div class="menu-card-desc">Sauce tomate ou blanche · mozzarella · saumon · basilic frais</div>
+    </div>
+    <div class="menu-card" data-cat="pizzas">
+      <div class="menu-card-num">43</div><div class="menu-card-price">18.000 DT</div>
+      <div class="menu-card-name">Panuzzo Pollo</div>
+      <div class="menu-card-type">Panuzzo</div>
+      <div class="menu-card-desc">Poulet grillé · gruyère · sauce piquante · frites</div>
+    </div>
+
+    <!-- PLATS -->
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">44</div><div class="menu-card-price">19.000 DT</div>
+      <div class="menu-card-name">Pasta Arrabbiata</div>
+      <div class="menu-card-type">Pasta</div>
+      <div class="menu-card-desc">Sauce piquante au thon · olives · câpres</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">45</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Pasta Carbonara</div>
+      <div class="menu-card-type">Pasta</div>
+      <div class="menu-card-desc">Sauce blanche · poulet · jambon · champignons</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">46</div><div class="menu-card-price">32.000 DT</div>
+      <div class="menu-card-name">Salmone Affumicato</div>
+      <div class="menu-card-type">Pasta · Mer</div>
+      <div class="menu-card-desc">Sauce blanche · tagliatelle · saumon</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">47</div><div class="menu-card-price">38.000 DT</div>
+      <div class="menu-card-name">Frutti di Mare</div>
+      <div class="menu-card-type">Pasta · Mer</div>
+      <div class="menu-card-desc">Sauce tomate · spaghetti · fruits de mer</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">48</div><div class="menu-card-price">22.000 DT</div>
+      <div class="menu-card-name">Escalope à la Crème</div>
+      <div class="menu-card-type">Plats · Viande</div>
+      <div class="menu-card-desc">Escalope · sauce aux champignons · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">49</div><div class="menu-card-price">28.000 DT</div>
+      <div class="menu-card-name">Daurade Royale</div>
+      <div class="menu-card-type">Plats · Mer</div>
+      <div class="menu-card-desc">Poisson daurade · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">50</div><div class="menu-card-price">54.000 DT</div>
+      <div class="menu-card-name">Crevette Royale</div>
+      <div class="menu-card-type">Plats · Mer · Premium</div>
+      <div class="menu-card-desc">Crevettes royales grillées · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">51</div><div class="menu-card-price">120.000 DT</div>
+      <div class="menu-card-name">Plateau Montréal</div>
+      <div class="menu-card-type">Plats · 2 personnes · Signature</div>
+      <div class="menu-card-desc">Fruits de mer · daurade · friture de rouget · salade · garnitures</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">52</div><div class="menu-card-price">18.000 DT</div>
+      <div class="menu-card-name">Salade César</div>
+      <div class="menu-card-type">Entrées</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">53</div><div class="menu-card-price">22.000 DT</div>
+      <div class="menu-card-name">Ojja aux Merguez</div>
+      <div class="menu-card-type">Entrées · Tunisien</div>
+    </div>
+    <div class="menu-card" data-cat="plats">
+      <div class="menu-card-num">54</div><div class="menu-card-price">25.000 DT</div>
+      <div class="menu-card-name">Lasagne de Chef</div>
+      <div class="menu-card-type">Pasta · Chef</div>
+    </div>
+
+    <!-- DESSERTS -->
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">55</div><div class="menu-card-price">8.000 DT</div>
+      <div class="menu-card-name">Tarte au Citron</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">56</div><div class="menu-card-price">13.500 DT</div>
+      <div class="menu-card-name">Cheesecake</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">57</div><div class="menu-card-price">13.500 DT</div>
+      <div class="menu-card-name">Tiramisu</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">58</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Fondant au Chocolat</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">59</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Brownie</div>
+      <div class="menu-card-type">Desserts</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">60</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Banana Split</div>
+      <div class="menu-card-type">Glaces</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">61</div><div class="menu-card-price">13.000 DT</div>
+      <div class="menu-card-name">Smoothie Pina Colada</div>
+      <div class="menu-card-type">Smoothies</div>
+      <div class="menu-card-desc">Ananas · noix de coco · yaourt · mascarpone</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">62</div><div class="menu-card-price">17.000 DT</div>
+      <div class="menu-card-name">Smoothie Jwajem</div>
+      <div class="menu-card-type">Smoothies · Premium</div>
+      <div class="menu-card-desc">Fruits · fruits secs · yaourt · crème chantilly</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">63</div><div class="menu-card-price">14.500 DT</div>
+      <div class="menu-card-name">Smoothie Bowl Montréal</div>
+      <div class="menu-card-type">Smoothies Bowl · Signature</div>
+      <div class="menu-card-desc">Banane · fraise · dattes · granola</div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <div class="menu-card-num">64</div><div class="menu-card-price">12.000 DT</div>
+      <div class="menu-card-name">Menu Enfant Kidream</div>
+      <div class="menu-card-type">Menu Enfant</div>
+      <div class="menu-card-desc">Nuggets · frites · pâte ou riz</div>
+    </div>
+
   </div>
 </section>
 
