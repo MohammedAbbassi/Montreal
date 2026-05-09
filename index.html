@@ -1055,29 +1055,195 @@ section { position: relative; overflow: hidden; }
   transform: translateY(0);
 }
 
-/* ——— MOBILE ——— */
+/* ——— HAMBURGER BUTTON ——— */
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 200;
+}
+.nav-burger span {
+  display: block;
+  height: 1.5px;
+  background: var(--cream);
+  border-radius: 2px;
+  transition: transform .3s ease, opacity .3s ease, width .3s ease;
+  transform-origin: center;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile drawer */
+.mobile-drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  flex-direction: column;
+  background: rgba(26,4,4,.98);
+  backdrop-filter: blur(16px);
+  padding: 7rem 2.5rem 3rem;
+  transform: translateX(100%);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+}
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+.mobile-drawer ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.mobile-drawer ul li {
+  border-bottom: 1px solid rgba(139,26,26,.25);
+}
+.mobile-drawer ul li a {
+  display: block;
+  padding: 1.2rem 0;
+  color: var(--cream2);
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: color .2s, padding-left .2s;
+}
+.mobile-drawer ul li a:hover { color: var(--gold); padding-left: .5rem; }
+.mobile-drawer .drawer-cta {
+  margin-top: 2.5rem;
+  display: block;
+  text-align: center;
+  background: var(--red);
+  color: var(--cream);
+  padding: 1rem;
+  border: 1px solid var(--red-light);
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: .8rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.mobile-drawer .drawer-tagline {
+  margin-top: auto;
+  padding-top: 2rem;
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ——— TABLET (≤ 900px) ——— */
 @media (max-width: 900px) {
-  nav { padding: 1.2rem 1.5rem; }
-  nav.scrolled { padding: .9rem 1.5rem; }
+  /* Nav */
+  nav { padding: 1rem 1.5rem; }
+  nav.scrolled { padding: .8rem 1.5rem; }
   .nav-links { display: none; }
-  .hero-content { padding: 0 1.5rem; }
+  .nav-burger { display: flex; }
+  .mobile-drawer { display: flex; }
+
+  /* Hero */
+  .hero-content { padding: 0 1.5rem; max-width: 100%; }
   .hero-badge { right: 1.5rem; bottom: 2rem; }
+  .hero-badge-rating { font-size: 2.5rem; }
   .hero-scroll { left: 1.5rem; }
-  .hero-title { font-size: clamp(3rem, 12vw, 5rem); }
+
+  /* Ambiance */
   .ambiance { grid-template-columns: 1fr; }
-  .ambiance-left { padding: 3.5rem 2rem; }
-  .ambiance-right { height: 300px; }
+  .ambiance-left { padding: 4rem 2rem; }
+  .ambiance-right { height: 320px; grid-template-rows: 1fr 1fr; }
+
+  /* Menu */
   .menu-section { padding: 5rem 1.5rem; }
   .menu-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-  .menu-grid { grid-template-columns: 1fr; }
+  .menu-tabs { flex-wrap: wrap; }
+  .menu-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Experience */
   .experience { grid-template-columns: 1fr; padding: 5rem 1.5rem; gap: 3rem; }
-  .experience-features { grid-template-columns: 1fr; }
+  .experience-features { grid-template-columns: 1fr 1fr; }
+
+  /* Reviews */
   .reviews { padding: 5rem 1.5rem; }
-  .reviews-grid { grid-template-columns: 1fr; }
+  .reviews-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Info */
   .info-section { grid-template-columns: 1fr; padding: 5rem 1.5rem; gap: 3rem; }
-  .contact { grid-template-columns: 1fr; padding: 3.5rem 1.5rem; gap: 3rem; }
+
+  /* Contact / Form */
+  .contact { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+  .form-row { grid-template-columns: 1fr 1fr; }
+
+  /* Footer */
   footer { flex-direction: column; gap: 1.5rem; padding: 2.5rem 1.5rem; text-align: center; }
-  .footer-links { flex-wrap: wrap; justify-content: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+}
+
+/* ——— MOBILE (≤ 480px) ——— */
+@media (max-width: 480px) {
+  /* Hero */
+  .hero-content { padding: 0 1.25rem; }
+  .hero-eyebrow { font-size: .6rem; letter-spacing: .2em; }
+  .hero-title { font-size: clamp(3rem, 14vw, 4.5rem); }
+  .hero-tagline { font-size: .85rem; }
+  .hero-actions { flex-direction: column; align-items: flex-start; gap: .75rem; }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-outline { width: 100%; text-align: center; }
+  .hero-badge { display: none; }
+  .hero-scroll { display: none; }
+
+  /* Section headings */
+  .section-title { font-size: clamp(1.8rem, 8vw, 2.5rem); }
+
+  /* Ambiance */
+  .ambiance-left { padding: 3rem 1.25rem; }
+  .ambiance-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .ambiance-right { height: 260px; }
+
+  /* Menu */
+  .menu-section { padding: 4rem 1.25rem; }
+  .menu-grid { grid-template-columns: 1fr; }
+  .menu-card { padding: 1.75rem 1.25rem; }
+  .menu-card-num { font-size: 2.5rem; }
+
+  /* Experience */
+  .experience { padding: 4rem 1.25rem; gap: 2.5rem; }
+  .experience-features { grid-template-columns: 1fr; gap: 1.75rem; }
+
+  /* Reviews */
+  .reviews { padding: 4rem 1.25rem; }
+  .reviews-grid { grid-template-columns: 1fr; }
+
+  /* Info */
+  .info-section { padding: 4rem 1.25rem; }
+  .hours-table { font-size: .8rem; }
+  .hours-table td { padding: .6rem .5rem; }
+
+  /* Contact / Form */
+  .contact { padding: 3.5rem 1.25rem; gap: 2.5rem; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .steps-bar { gap: 0; }
+  .step-label { display: none; }
+  .time-slots { gap: .4rem; }
+  .time-slot { padding: .5rem .7rem; font-size: .7rem; }
+  .occasion-pills { gap: .4rem; }
+  .pill { padding: .4rem .75rem; font-size: .72rem; }
+  .summary-box { padding: 1.1rem; }
+
+  /* Cursor glow — pointless on touch */
+  #cursor-glow { display: none; }
+
+  /* Footer */
+  footer { padding: 2rem 1.25rem; }
+  .footer-links { gap: .75rem; }
 }
 </style>
 </head>
@@ -1122,7 +1288,23 @@ section { position: relative; overflow: hidden; }
     <li><a href="#info">Infos</a></li>
     <li><a href="#contact" class="nav-cta">Réservation</a></li>
   </ul>
+  <button class="nav-burger" id="burgerBtn" aria-label="Menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <ul>
+    <li><a href="#ambiance" onclick="closeDrawer()">L'Ambiance</a></li>
+    <li><a href="#menu" onclick="closeDrawer()">Menu</a></li>
+    <li><a href="menu.html">Carte complète</a></li>
+    <li><a href="#avis" onclick="closeDrawer()">Avis</a></li>
+    <li><a href="#info" onclick="closeDrawer()">Infos</a></li>
+  </ul>
+  <a href="#contact" class="drawer-cta" onclick="closeDrawer()">Réserver une table</a>
+  <div class="drawer-tagline">Tabarka · Vue sur mer · 24h/24</div>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="accueil">
@@ -1579,6 +1761,24 @@ const nav = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 60);
 }, { passive: true });
+
+// ——— MOBILE DRAWER ———
+function toggleDrawer() {
+  const btn = document.getElementById('burgerBtn');
+  const drawer = document.getElementById('mobileDrawer');
+  const open = drawer.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close on outside tap
+document.getElementById('mobileDrawer').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeDrawer();
+});
 
 // ——— REVEAL ON SCROLL ———
 const reveals = document.querySelectorAll('.reveal');
