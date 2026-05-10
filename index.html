@@ -1737,7 +1737,12 @@ section { position: relative; overflow: hidden; }
 // ——— SUPABASE CONFIG ———
 const SUPABASE_URL = 'https://vxbxrkoeioakqrxvbnym.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_lh6JBbtLtg9L5OV6Rh7SMA_W0hjU8zd';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabaseClient = null;
+try {
+  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch(e) {
+  console.warn('Supabase failed to initialize. Reservation availability checks disabled.', e);
+}
 
 // ——— PAGE LOAD CURTAIN ———
 function dismissCurtain() {
@@ -1958,6 +1963,7 @@ function generateSlots() {
 const ALL_SLOTS = generateSlots();
 
 async function getBookedSlots(dateStr) {
+  if (!supabaseClient) return {};
   try {
     const { data, error } = await supabaseClient
       .from('reservations')
