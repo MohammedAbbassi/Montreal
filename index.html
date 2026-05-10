@@ -1988,7 +1988,12 @@ async function renderTimeSlots() {
   
   container.innerHTML = '<div style="color:var(--gold);font-size:.8rem;padding:1rem;">Chargement des disponibilités...</div>';
   
-  const slotUsage = await getBookedSlots(dateStr);
+  let slotUsage = {};
+  try {
+    slotUsage = await getBookedSlots(dateStr);
+  } catch (err) {
+    console.warn('Could not load availability from server, showing all slots as available.', err);
+  }
   container.innerHTML = '';
   selectedTime = '';
   
@@ -2047,7 +2052,7 @@ function validateStep1() {
   if (!val('f-nom'))    { showError('err-nom',    'Nom requis');    ok = false; } else clearError('err-nom');
   const tel = val('f-tel');
   if (!tel) { showError('err-tel', 'Téléphone requis'); ok = false; }
-  else if (!/^[\d\s\+\-]{6,15}$/.test(tel)) { showError('err-tel', 'Numéro invalide'); ok = false; }
+  else if (!/^[\d\s\+\-\.\(\)\/]{6,20}$/.test(tel)) { showError('err-tel', 'Numéro invalide'); ok = false; }
   else clearError('err-tel');
   const email = val('f-email');
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('err-email', 'Email invalide'); ok = false; }
